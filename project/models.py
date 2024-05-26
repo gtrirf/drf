@@ -11,7 +11,7 @@ class CategorySigns(models.Model):
         return self.name
 
 
-class RoadSings(models.Model):
+class RoadSigns(models.Model):
     category = models.ForeignKey(CategorySigns, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     image = models.ImageField(upload_to='images', blank=True, null=True)

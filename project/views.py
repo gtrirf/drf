@@ -1,19 +1,17 @@
 from django.shortcuts import render
-from .serializers import CategorSignsSerializer, RoadSignsSerializer
-from .models import CategorySigns, RoadSings
+from .serializers import CategorySignsSerializer, RoadSignsSerializer
+from .models import CategorySigns, RoadSigns
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
 
-# Create your views here.
-
 class ListCategoryApiView(APIView):
     def get(self, request):
-        category = CategorySigns.objects.all()
-        serializer = CategorSignsSerializer(category, many=True)
+        categories = CategorySigns.objects.all()
+        serializer = CategorySignsSerializer(categories, many=True)
         serializer_data = {
-            'cateory': serializer.data,
+            'category': serializer.data,
             'status': 'success',
             'status_code': status.HTTP_200_OK
         }
@@ -22,8 +20,8 @@ class ListCategoryApiView(APIView):
 
 class ListRoadSignsApiView(APIView):
     def get(self, request):
-        model = RoadSings.objects.all()
-        serializer = RoadSignsSerializer(model, many=True)
+        road_signs = RoadSigns.objects.all()
+        serializer = RoadSignsSerializer(road_signs, many=True)
         serializer_data = {
             'data': serializer.data,
             'status': 'success',
@@ -34,8 +32,16 @@ class ListRoadSignsApiView(APIView):
 
 class DetailRoadSignsApiView(APIView):
     def get(self, request, pk):
-        model = RoadSings.objects.get(id=pk)
-        serializer = RoadSignsSerializer(model)
+        try:
+            road_sign = RoadSigns.objects.get(id=pk)
+        except RoadSigns.DoesNotExist:
+            return Response({
+                'error': 'RoadSign not found',
+                'status': 'failure',
+                'status_code': status.HTTP_404_NOT_FOUND
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = RoadSignsSerializer(road_sign)
         serializer_data = {
             'data': serializer.data,
             'status': 'success',

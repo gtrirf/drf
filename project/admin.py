@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import CategorySigns,RoadSings
+from .models import CategorySigns, RoadSigns
 # Register your models here.
 
 admin.site.register(CategorySigns)
-admin.site.register(RoadSings)
+admin.site.register(RoadSigns)
