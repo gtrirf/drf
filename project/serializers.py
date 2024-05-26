@@ -1,23 +1,12 @@
 from rest_framework import serializers
-from .models import CategorySigns, RoadSings
+from .models import CategorySigns, RoadSigns  # Corrected import for RoadSigns
 
-
-class CategorSignsSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=100)
-
+class CategorySignsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CategorySigns
         fields = '__all__'
 
-
-class RoadSignsSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=100)
-    category = serializers.CharField(max_length=100)
-    image = serializers.ImageField()
-    video = serializers.FileField()
-    audio = serializers.FileField()
-    dock = serializers.FileField()
-
+class RoadSignsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RoadSings
+        model = RoadSigns
         fields = '__all__'

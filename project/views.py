@@ -1,29 +1,25 @@
 from django.shortcuts import render
-from .serializers import CategorSignsSerializer, RoadSignsSerializer
-from .models import CategorySigns, RoadSings
+from .serializers import CategorySignsSerializer, RoadSignsSerializer
+from .models import CategorySigns, RoadSigns  # Corrected import for RoadSigns
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-
-# Create your views here.
-
 class ListCategoryApiView(APIView):
     def get(self, request):
-        category = CategorySigns.objects.all()
-        serializer = CategorSignsSerializer(category, many=True)
+        categories = CategorySigns.objects.all()  # Changed 'category' to 'categories' for clarity
+        serializer = CategorySignsSerializer(categories, many=True)
         serializer_data = {
-            'cateory': serializer.data,
+            'category': serializer.data,  # Corrected key from 'cateory' to 'category'
             'status': 'success',
             'status_code': status.HTTP_200_OK
         }
         return Response(serializer_data)
 
-
 class ListRoadSignsApiView(APIView):
     def get(self, request):
-        model = RoadSings.objects.all()
-        serializer = RoadSignsSerializer(model, many=True)
+        road_signs = RoadSigns.objects.all()  # Corrected model name to RoadSigns
+        serializer = RoadSignsSerializer(road_signs, many=True)
         serializer_data = {
             'data': serializer.data,
             'status': 'success',
@@ -31,11 +27,18 @@ class ListRoadSignsApiView(APIView):
         }
         return Response(serializer_data)
 
-
 class DetailRoadSignsApiView(APIView):
     def get(self, request, pk):
-        model = RoadSings.objects.get(id=pk)
-        serializer = RoadSignsSerializer(model)
+        try:
+            road_sign = RoadSigns.objects.get(id=pk)  # Corrected model name to RoadSigns
+        except RoadSigns.DoesNotExist:
+            return Response({
+                'error': 'RoadSign not found',
+                'status': 'failure',
+                'status_code': status.HTTP_404_NOT_FOUND
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = RoadSignsSerializer(road_sign)
         serializer_data = {
             'data': serializer.data,
             'status': 'success',
